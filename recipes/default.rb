@@ -41,25 +41,25 @@ sysctl "chef-attributes" do
   value ""
 end
 
-ruby_block "zap_sysctl_d" do
-  block do
-    all = Dir.glob('/etc/sysctl.d/*.conf')
-    @run_context.resource_collection.each do |r|
-      if r.kind_of?(Chef::Resource::Sysctl) or r.kind_of?(Chef::Resource::SysctlMulti)
-        name = "/etc/sysctl.d/#{r.priority}-#{r.name.gsub(' ', '_')}.conf"
-        if all.delete(name)
-          Chef::Log.debug("Keeping #{name}")
-        end
-      end
-    end
-
-    all.each do |name|
-      r = Chef::Resource::File.new(name, @run_context)
-      r.cookbook_name=(cookbook_name)
-      r.recipe_name=(recipe_name)
-      r.action(:delete)
-      r.notifies(:run, "execute[sysctl-p]")
-      @run_context.resource_collection << r
-    end
-  end
-end
+#ruby_block "zap_sysctl_d" do
+#  block do
+#    all = Dir.glob('/etc/sysctl.d/*.conf')
+#    @run_context.resource_collection.each do |r|
+#      if r.kind_of?(Chef::Resource::Sysctl) or r.kind_of?(Chef::Resource::SysctlMulti)
+#        name = "/etc/sysctl.d/#{r.priority}-#{r.name.gsub(' ', '_')}.conf"
+#        if all.delete(name)
+#          Chef::Log.debug("Keeping #{name}")
+#        end
+#      end
+#    end
+#
+#    all.each do |name|
+#      r = Chef::Resource::File.new(name, @run_context)
+#      r.cookbook_name=(cookbook_name)
+#      r.recipe_name=(recipe_name)
+#      r.action(:delete)
+#      r.notifies(:run, "execute[sysctl-p]")
+#      @run_context.resource_collection << r
+#    end
+#  end
+#end
